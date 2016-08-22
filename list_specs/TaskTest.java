@@ -2,6 +2,7 @@ import static org.junit.Assert.*;
 import org.junit.*;
 import static org.mockito.Mockito.*;
 import list.*;
+import java.util.*;
 
 
 public class TaskTest{
@@ -9,19 +10,15 @@ public class TaskTest{
 Task task;
 @Before
 public void before(){
-  task = new Task("shop", "food", "August 11, 2016", "Important");
+  task = new Task("shop", "food", "August 11, 2016", "Important", "Not Completed");
 }
 
 @Test
 public void hasBeenCompleted(){
-  assertEquals(false, task.isCompleted());
+  assertEquals("Not Completed", task.isCompleted());
 }
 
-@Test
-public void taskNumber(){
-  Task mockedList = mock(Task.class);
-  assertEquals(8, verify(mockedList).getTaskNumber());
-}
+
 
 @Test
 public void hasTask(){
@@ -45,15 +42,32 @@ public void Importance(){
 
 @Test
 public void getIntDate(){
-  String date = "23/12/2016";
-  assertEquals(23, task.returnDay(date));
+  String date = "August 11, 2016";
+  assertEquals(11, task.returnDay(date));
 }
 
 @Test
-public void getIntMonth(){
- assertEquals("December",  task.returnMonth("23/12/2016"));
+public void geMonth(){
+ assertEquals("August",  task.returnMonth("August 11, 2016"));
 }
 
+@Test
+public void thedayToDate(){
+  Date date = new Date("August 11, 2016");
+  assertEquals(date,task.dateToDate("August 11, 2016"));
+}
+
+@Test
+public void changeImportance(){
+  task.setImportance("not Important");
+  assertEquals("not Important",task.getImportance());
+}
+
+@Test 
+public void changeToCompleted(){
+  task.setCompleted("Completed");
+  assertEquals("Completed", task.isCompleted());
+}
 
 
 

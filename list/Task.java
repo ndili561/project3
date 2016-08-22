@@ -5,42 +5,35 @@ import java.io.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import java.util.Arrays;
 
 
 public class Task{
- // private List<Entrant>entrants;
- // private Map<String,Double>firstCategory;
- // private Map<String,Double>secondCategory;
- // private Map<String,Double>thirdCategory;
   private String task;
   private String description;
   private String date;
   private String importance;
-  private boolean completed;
-  private static int nextNumber=1;
+  private String completed;
   private static List<Task>tasks;
 
 
-  public Task(String aTask,String aDescription,String aDate, String importance){
+  public Task(String aTask,String aDescription,String aDate, String importance,String isCompleted){
    this.task = aTask;
    this.description = aDescription;
    this.date = aDate;
    this.importance = importance;
-   this.completed = false;
-   Task.nextNumber+=1;
+   this.completed = isCompleted;
  }
 
  public Task(){
 
  }
 
- public boolean isCompleted(){
+
+ public String isCompleted(){
   return this.completed;
 }
 
-public static int getTaskNumber(){
-  return Task.nextNumber;
-}
 
 public String getTask(){
   return this.task;
@@ -54,14 +47,27 @@ public String getDate(){
   return this.date;
 }
 
+public Date getDateToDate(){
+  return Task.dateToDate(this.getDate());
+}
+
 public String getImportance(){
   return this.importance;
 }
 
+public void setImportance(String importance){
+   this.importance = importance;
+}
+
+public void setCompleted(String completed){
+  this.completed = completed;
+}
+
+
 public int returnDay(String date){
  int day=0;
  try{
-  SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+  SimpleDateFormat formatter = new SimpleDateFormat("MMM d, y");
   Date dat = formatter.parse(date);
   Calendar cal = Calendar.getInstance();
   cal.setTime(dat);
@@ -75,7 +81,7 @@ return day;
 public String returnMonth(String date){
  int month=0;
  try{
-  SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+  SimpleDateFormat formatter = new SimpleDateFormat("MMM d, y");
   Date dat = formatter.parse(date);
   Calendar cal = Calendar.getInstance();
   cal.setTime(dat);
@@ -98,14 +104,14 @@ private static String getMonthForInt(int num) {
 }
 
 public static void writeToFile(Task task){
-  String path = Task.choose();
-  File file = new File(path);
+  // String path = Task.choose();
+  File file = new File("/Users/user/Desktop/text.txt");
   FileWriter writer = null;
   try
   {
     writer = new FileWriter(file,true);
-    writer.append(System.getProperty("line.separator"));
-    writer.write(Task.getTaskNumber()+"    "+task.getTask() + "    " + task.getDescription() + "    " + task.getDate() +"    " +task.isCompleted());
+    writer.write(task.getTask() + "    " + task.getDescription() + "    " + task.getDate()+"    "+task.getImportance()+"    " +task.isCompleted());
+    writer.write(System.getProperty( "line.separator" ));
   }
   catch(Exception exception)
   {
@@ -137,33 +143,30 @@ return file;
 }
 
 
-
-
-
-
-public static Collection<Task> loadTask(){
- String path = Task.choose();
- File file = new File(path);
+public static List<Task> loadTask(){
+ // String path = Task.choose();
+ File file = new File("/Users/user/Desktop/text.txt");
  Scanner bufferedScanner = null;
  tasks = new ArrayList<Task>();
  try{
-  int count= 0;
   String task;
   String description;
   String date;
   String importance;
-  boolean completed;
+  String completed;
   Scanner lineScanner;
   String currentLine=null;
   bufferedScanner = new Scanner(new BufferedReader(new FileReader(file)));
   while(bufferedScanner.hasNextLine()){
     currentLine = bufferedScanner.nextLine();
     lineScanner = new Scanner(currentLine);
+    lineScanner.useDelimiter("    ");
     task = lineScanner.next();
     description = lineScanner.next();
     date = lineScanner.next();
     importance = lineScanner.next();
-    tasks.add(new Task(task,description,date,importance));
+    completed = lineScanner.next();
+    tasks.add(new Task(task,description,date,importance,completed));
   }
 }
 catch(Exception e){
@@ -175,12 +178,109 @@ finally{
   }catch(Exception e){
    System.out.println("Error" +e);
  }
-}
-System.out.println(tasks);
+} 
 return tasks;
 }
 
-
-
-
+public static Date dateToDate(String adate){
+  Date date = null;
+  DateFormat format = new SimpleDateFormat("MMMM d, yyyy");
+  try{
+  date = format.parse(adate);
+}catch(Exception e){
+System.out.println("Error" + e);
 }
+return date;
+}
+
+public static void convertObject(String aList){
+ String[] array = aList.split(",");
+ List<Task>task = Task.loadTask();
+ // List<Task> copy = new ArrayList<Task>(task);
+//avoid the cuncurrent modification exception
+ for( Iterator< Task > it = task.iterator(); it.hasNext() ; )
+ {
+   Task str = it.next();
+   if( str.getTask().equals(array[0] ) )
+   {
+     it.remove();
+   }
+ }
+ Task.reWrite(task);
+}
+
+
+
+
+public static void reWrite(List<Task> list){
+  PrintWriter writer = null;
+  try{
+    writer = new PrintWriter("/Users/user/Desktop/text.txt");
+    writer.print("");
+  }catch(Exception exec){
+   System.out.println("Exception"+exec);
+ }
+ writer.close();
+ File file = new File("/Users/user/Desktop/text.txt");
+ FileWriter write = null;
+ try{
+  write = new FileWriter(file,true);
+  for (Task task : list){
+    write.write(task.getTask() + "    " + task.getDescription() + "    " + task.getDate()+"    "+task.getImportance()+"    " +task.isCompleted());
+    write.write(System.getProperty( "line.separator" ));
+
+  }
+  
+}catch(Exception exect){
+  System.out.println("Error"+ exect);
+}
+finally 
+{
+ try{
+   write.close();
+ }
+ catch (Exception except){
+   System.out.println("Error "+ except);
+ }
+}
+
+} 
+
+
+
+  public String createAFile(){
+    String file = null;
+   JFileChooser chooser = new JFileChooser();
+   chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+   chooser.setAcceptAllFileFilterUsed(false);
+  if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+      file = chooser.getSelectedFile().getAbsolutePath();
+  }
+  return file;
+  }
+
+  public void setToCompleted(String aList){
+  String[] array = aList.split(",");
+  String lastToken = array[array.length-1];
+  lastToken="Completed";
+  array[array.length-1]=lastToken;
+  List<Task>task = Task.loadTask();
+  for( Iterator< Task > it = task.iterator(); it.hasNext() ; )
+  {
+    Task str = it.next();
+    if( str.getTask().equals(array[0] ) )
+    {
+      it.remove();
+    }
+  }
+  Task result = new Task(array[0],array[1],array[2]+array[3],array[4],lastToken);
+  System.out.println(result.isCompleted());
+  task.add(result);
+  Task.reWrite(task);
+  }
+}  
+
+
+
+
+
