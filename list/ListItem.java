@@ -1,25 +1,28 @@
 package list;
-import java.awt.BorderLayout;
+import java.awt.*;
+// import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+// import javax.swing.DefaultListModel;
+// import javax.swing.JButton;
+// import javax.swing.JFrame;
+// import javax.swing.JList;
+// import javax.swing.JPanel;
+// import javax.swing.JScrollPane;
 import java.util.List;
 import java.util.*;
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.JRadioButton;
+// import javax.swing.JRadioButton;
 
 public class ListItem extends JPanel {
 
-  JList list;
-  DefaultListModel model;
-  List<Task>editTask;
-  String selectedValue = null;
+  private JList list;
+  private DefaultListModel model;
+  private List<Task>editTask;
+  private String selectedValue = null;
+  private JScrollPane pane;
 
  
 
@@ -27,7 +30,8 @@ public class ListItem extends JPanel {
     setLayout(new BorderLayout());
     model = new DefaultListModel();
     list = new JList(model);
-    JScrollPane pane = new JScrollPane(list);
+    pane = new JScrollPane(list);
+    pane.setPreferredSize(new Dimension(300, 300));
     JButton editButton = new JButton("Mark as Completed");
     JButton removeButton = new JButton("Remove Element");
     editTask = Panel.tasks;
@@ -35,20 +39,24 @@ public class ListItem extends JPanel {
       model.addElement(task.getTask()+", "+task.getDescription()+", "+task.getDate()+", "+task.getImportance()+", "+task.isCompleted());
       
     }
-  
-
-   
 
 
     editButton.addActionListener(new ActionListener() {
+      @Override
       public void actionPerformed(ActionEvent e) {
-       // List<String>result = new ArrayList<String>();
-       // result.add(selectedValue);
         Task task = new Task();
         task.setToCompleted(selectedValue);
+        editTask = Panel.tasks;
+        int selectedIndex = list.getSelectedIndex();
+        if (selectedIndex != -1){
+          model.remove(selectedIndex); 
+        }
+      JOptionPane.showMessageDialog(list.getComponent(0), "Task Set As Completed");
       }
+
     });
     removeButton.addActionListener(new ActionListener() {
+      @Override
       public void actionPerformed(ActionEvent e) {
         // List<String>result = new ArrayList<String>();
         // model = (DefaultListModel) list.getModel();
@@ -85,4 +93,5 @@ public class ListItem extends JPanel {
     add(editButton, BorderLayout.WEST);
     add(removeButton, BorderLayout.EAST);
   }
+
 }

@@ -7,6 +7,9 @@ import java.net.URL;
 import java.util.List;
 import java.util.*;
 import java.io.*;
+import com.github.lgooddatepicker.optionalusertools.*;
+import java.time.LocalDate;
+
 
 
 
@@ -19,6 +22,8 @@ public class Panel extends JPanel {
  private static JRadioButton radioButton;
  private static JFrame frame;
  protected static List<Task>tasks;
+ private JPanel titlePanel;
+ private static Panel mainPanel;
 
 
 
@@ -27,7 +32,7 @@ public class Panel extends JPanel {
   JLabel titleLabel = new JLabel(TITLE_TEXT, SwingConstants.CENTER);
   titleLabel.setFont(titleLabel.getFont().deriveFont(Font.BOLD,
     TITLE_POINTS));
-  JPanel titlePanel = new JPanel();
+  titlePanel = new JPanel();
   titlePanel.add(titleLabel); 
 
 
@@ -93,6 +98,30 @@ public class Panel extends JPanel {
   }
 
   });
+  JButton calendar = new JButton("Calendar");
+  southBtnPanel.add(calendar);
+  calendar.addMouseListener(new MouseAdapter(){
+    public void mousePressed(MouseEvent e) {
+      LocalDate today = LocalDate.now();
+      DatePickerSettings dateSettings = new DatePickerSettings();
+      DatePicker adate = new DatePicker(dateSettings);
+      dateSettings.setHighlightPolicy(new Highlight());
+      JFrame calendar = new JFrame();
+      // Highlight highlight = new Highlight();
+      CalendarPanel date1 = new CalendarPanel(adate);
+      
+      // highlight.getHighlightInformationOrNull(today);
+      calendar.setContentPane(date1);
+      calendar.setVisible(true);
+      Toolkit tk = Toolkit.getDefaultToolkit();
+      Dimension screenSize = tk.getScreenSize();
+      int screenHeight = screenSize.height;
+      int screenWidth = screenSize.width;
+      calendar.setSize(screenWidth / 2, screenHeight / 2);
+      calendar.setLocation(screenWidth / 4, screenHeight / 4);
+      calendar.pack();
+    }
+  });
   JButton createJavadoc = new JButton("Create Javadoc");
   southBtnPanel.add(createJavadoc);
   createJavadoc.addMouseListener(new MouseAdapter(){
@@ -138,21 +167,28 @@ private static void addTask(){
 private static void readFile(){
  tasks = Task.loadTask();
  JFrame frame = new JFrame("List Model Example");
- // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
  frame.setContentPane(new ListItem());
- frame.setSize(400, 200);
+ // frame.setSize(400, 200);
  frame.setVisible(true);
+ Toolkit tk = Toolkit.getDefaultToolkit();
+ Dimension screenSize = tk.getScreenSize();
+int screenHeight = screenSize.height;
+int screenWidth = screenSize.width;
+  frame.setSize(screenWidth / 2, screenHeight / 2);
+  frame.setLocation(screenWidth / 4, screenHeight / 4);
+ 
 }
 
 
 
 public static void createAndShowGui() {
-  Panel mainPanel = new Panel();
+  mainPanel = new Panel();
   frame = new JFrame("To-Do List");
   frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
   frame.getContentPane().add(mainPanel);
   frame.pack();
   frame.setLocationByPlatform(true);
   frame.setVisible(true);
+  frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 }
 }

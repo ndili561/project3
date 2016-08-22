@@ -23,7 +23,7 @@ public class Task{
    this.date = aDate;
    this.importance = importance;
    this.completed = isCompleted;
- }
+  }
 
  public Task(){
 
@@ -32,39 +32,39 @@ public class Task{
 
  public String isCompleted(){
   return this.completed;
-}
+ }
 
 
-public String getTask(){
+ public String getTask(){
   return this.task;
-}
+ }
 
-public String getDescription(){
+ public String getDescription(){
   return this.description;
-}
+ }
 
-public String getDate(){
+ public String getDate(){
   return this.date;
-}
+ }
 
-public Date getDateToDate(){
+ public Date getDateToDate(){
   return Task.dateToDate(this.getDate());
-}
+ }
 
-public String getImportance(){
+ public String getImportance(){
   return this.importance;
-}
+ }
 
-public void setImportance(String importance){
+ public void setImportance(String importance){
    this.importance = importance;
-}
+  }
 
-public void setCompleted(String completed){
+ public void setCompleted(String completed){
   this.completed = completed;
-}
+ }
 
 
-public int returnDay(String date){
+ public int returnDay(String date){
  int day=0;
  try{
   SimpleDateFormat formatter = new SimpleDateFormat("MMM d, y");
@@ -72,28 +72,30 @@ public int returnDay(String date){
   Calendar cal = Calendar.getInstance();
   cal.setTime(dat);
   day = cal.get(Calendar.DAY_OF_MONTH);
-}catch (ParseException e) {
+  }catch (ParseException e) 
+  {
   System.out.println(e);
-}
-return day;
-}
+  }
+  return day;
+  }
 
-public String returnMonth(String date){
- int month=0;
- try{
-  SimpleDateFormat formatter = new SimpleDateFormat("MMM d, y");
-  Date dat = formatter.parse(date);
-  Calendar cal = Calendar.getInstance();
-  cal.setTime(dat);
-  month = cal.get(Calendar.MONTH);
-}catch (ParseException e) {
-  System.out.println(e);
-}
-return Task.getMonthForInt(month);
-}
+  public String returnMonth(String date){
+   int month=0;
+   try{
+    SimpleDateFormat formatter = new SimpleDateFormat("MMM d, y");
+    Date dat = formatter.parse(date);
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(dat);
+    month = cal.get(Calendar.MONTH);
+  }catch (ParseException e) 
+  {
+    System.out.println(e);
+  }
+  return Task.getMonthForInt(month);
+  }
 
 
-private static String getMonthForInt(int num) {
+  private static String getMonthForInt(int num) {
   String month = "wrong";
   DateFormatSymbols dfs = new DateFormatSymbols();
   String[] months = dfs.getMonths();
@@ -101,9 +103,9 @@ private static String getMonthForInt(int num) {
     month = months[num];
   }
   return month;
-}
+  }
 
-public static void writeToFile(Task task){
+  public static void writeToFile(Task task){
   // String path = Task.choose();
   File file = new File("/Users/user/Desktop/text.txt");
   FileWriter writer = null;
@@ -126,21 +128,18 @@ public static void writeToFile(Task task){
       System.out.println("Error "+ exception);
     }
   }
+    }
 
-
-
-}
-
-private static String choose(){
+  private static String choose(){
  String file = null;
  JFileChooser chooser = new JFileChooser();
  Component y = new Checkbox();
  int returnVal = chooser.showOpenDialog(y);
  if(returnVal == JFileChooser.APPROVE_OPTION) {
   file = chooser.getSelectedFile().getAbsolutePath();
-}
-return file;
-}
+  }
+  return file;
+  }
 
 
 public static List<Task> loadTask(){
@@ -228,9 +227,7 @@ public static void reWrite(List<Task> list){
   for (Task task : list){
     write.write(task.getTask() + "    " + task.getDescription() + "    " + task.getDate()+"    "+task.getImportance()+"    " +task.isCompleted());
     write.write(System.getProperty( "line.separator" ));
-
   }
-  
 }catch(Exception exect){
   System.out.println("Error"+ exect);
 }

@@ -1,5 +1,4 @@
 package list;
-
 import javax.swing.SwingUtilities;
 
 public class Runner{
