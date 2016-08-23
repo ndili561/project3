@@ -6,27 +6,45 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.util.Arrays;
+import com.github.lgooddatepicker.components.*;
+import java.net.URL;
+import java.util.List;
+import java.util.*;
+import java.io.*;
+import com.github.lgooddatepicker.optionalusertools.*;
+import java.time.LocalDate;
+import com.github.lgooddatepicker.zinternaltools.*;
+import java.awt.Color;
+import java.time.ZoneId;
+import java.time.Instant;
+import javax.swing.JComboBox;
 
 
-public class Task{
+public class Task implements DateHighlightPolicy {
   private String task;
   private String description;
   private String date;
   private String importance;
   private String completed;
+  private String category;
   private static List<Task>tasks;
 
 
-  public Task(String aTask,String aDescription,String aDate, String importance,String isCompleted){
+  public Task(String aTask,String aDescription,String aDate, String category,String importance,String isCompleted){
    this.task = aTask;
    this.description = aDescription;
    this.date = aDate;
+   this.category = category;
    this.importance = importance;
    this.completed = isCompleted;
   }
 
  public Task(){
 
+ }
+
+ public String getCategory(){
+  return this.category;
  }
 
 
@@ -112,7 +130,7 @@ public class Task{
   try
   {
     writer = new FileWriter(file,true);
-    writer.write(task.getTask() + "    " + task.getDescription() + "    " + task.getDate()+"    "+task.getImportance()+"    " +task.isCompleted());
+    writer.write(task.getTask() + "    " + task.getDescription() + "    " + task.getDate()+"    "+task.getCategory()+"    "+task.getImportance()+"    " +task.isCompleted());
     writer.write(System.getProperty( "line.separator" ));
   }
   catch(Exception exception)
@@ -130,7 +148,7 @@ public class Task{
   }
     }
 
-  private static String choose(){
+  protected static String choose(){
  String file = null;
  JFileChooser chooser = new JFileChooser();
  Component y = new Checkbox();
@@ -151,6 +169,7 @@ public static List<Task> loadTask(){
   String task;
   String description;
   String date;
+  String category;
   String importance;
   String completed;
   Scanner lineScanner;
@@ -159,13 +178,16 @@ public static List<Task> loadTask(){
   while(bufferedScanner.hasNextLine()){
     currentLine = bufferedScanner.nextLine();
     lineScanner = new Scanner(currentLine);
+    System.out.println(currentLine);
     lineScanner.useDelimiter("    ");
     task = lineScanner.next();
     description = lineScanner.next();
     date = lineScanner.next();
+    category = lineScanner.next();
     importance = lineScanner.next();
     completed = lineScanner.next();
-    tasks.add(new Task(task,description,date,importance,completed));
+    System.out.println(category);
+    tasks.add(new Task(task,description,date,category,importance,completed));
   }
 }
 catch(Exception e){
@@ -182,10 +204,11 @@ return tasks;
 }
 
 public static Date dateToDate(String adate){
+  String trimmed = adate.trim();
   Date date = null;
-  DateFormat format = new SimpleDateFormat("MMMM d, yyyy");
+  DateFormat format = new SimpleDateFormat("MMMM dd, yyyy",Locale.US);
   try{
-  date = format.parse(adate);
+  date = format.parse(trimmed);
 }catch(Exception e){
 System.out.println("Error" + e);
 }
@@ -225,7 +248,7 @@ public static void reWrite(List<Task> list){
  try{
   write = new FileWriter(file,true);
   for (Task task : list){
-    write.write(task.getTask() + "    " + task.getDescription() + "    " + task.getDate()+"    "+task.getImportance()+"    " +task.isCompleted());
+    write.write(task.getTask() + "    " + task.getDescription() + "    " + task.getDate()+"    "+task.getCategory()+"    "+task.getImportance()+"    " +task.isCompleted());
     write.write(System.getProperty( "line.separator" ));
   }
 }catch(Exception exect){
@@ -270,11 +293,48 @@ finally
       it.remove();
     }
   }
-  Task result = new Task(array[0],array[1],array[2]+array[3],array[4],lastToken);
+  Task result = new Task(array[0],array[1],array[2]+array[3],array[4],array[5],lastToken);
   System.out.println(result.isCompleted());
   task.add(result);
   Task.reWrite(task);
   }
+
+  public static List<Integer> eventsDay(){
+    Date d = null;
+    Calendar calend = Calendar.getInstance();
+    List<Task> events = Task.loadTask();
+    List<Integer> day = new ArrayList<Integer>();
+    for(Task e : events){
+      d = Task.dateToDate(e.getDate());
+      Calendar cal = Calendar.getInstance();
+      cal.setTime(d);
+      int days = cal.get(Calendar.DAY_OF_MONTH);
+      day.add(days);
+    }
+    return day;
+  }
+
+    public HighlightInformation getHighlightInformationOrNull(LocalDate date){
+     List <Task> task = Task.loadTask();
+     int dayinint = 0;
+     for (Task t : task){
+        // Task ats = new Task();
+        // String trimmed = t.getDate().trim();
+         Date day = Task.dateToDate(t.getDate());
+         Calendar cal = Calendar.getInstance();
+         cal.setTime(day);
+         dayinint= cal.get(Calendar.DAY_OF_MONTH);
+        // int adayinint = ats.returnDay(trimmed);
+      System.out.println(dayinint);
+      if (date.getDayOfMonth() == dayinint) {
+        return new HighlightInformation(Color.red, null, "");
+         
+    }
+  }
+    return null;
+  }
+     
+  
 }  
 
 

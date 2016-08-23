@@ -12,20 +12,28 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.*;
 import java.util.Iterator;
+import java.util.Enumeration;
 
 
 
-public class Highlight implements DateHighlightPolicy  {
+public class Highlight {
 
-  public HighlightInformation getHighlightInformationOrNull(LocalDate date) {
-     
-    if (date.getDayOfMonth() == 22) {
-      return new HighlightInformation(Color.red, null, "It's the 25th!");
+  public HighlightInformation getHighlightInformationOrNull(LocalDate date){
+
+    if (date.getDayOfMonth() == 30) {
+      return new HighlightInformation(Color.red, null, "");
     }
     return null;
   }
+   
+
+}
+   
+  
+
+
+
 
 
 
   
-}

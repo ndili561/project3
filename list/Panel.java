@@ -9,6 +9,12 @@ import java.util.*;
 import java.io.*;
 import com.github.lgooddatepicker.optionalusertools.*;
 import java.time.LocalDate;
+import com.github.lgooddatepicker.zinternaltools.*;
+import java.awt.Color;
+import java.time.ZoneId;
+import java.time.Instant;
+import javax.swing.JComboBox;
+
 
 
 
@@ -24,6 +30,7 @@ public class Panel extends JPanel {
  protected static List<Task>tasks;
  private JPanel titlePanel;
  private static Panel mainPanel;
+ private static JComboBox menu;
 
 
 
@@ -53,6 +60,10 @@ public class Panel extends JPanel {
   datePickerButton.setIcon(dateExampleIcon);
   datePickerButton.setIcon(dateExampleIcon);
   northAreaPanel.add(date);
+  String[] category={"Business","Pleasure"};
+  menu = new JComboBox<String>(category);
+  menu.setVisible(true);
+  northAreaPanel.add(menu);
   radioButton = new JRadioButton("Important");
   radioButton.setActionCommand("Important");
   northAreaPanel.add(radioButton);
@@ -73,7 +84,7 @@ public class Panel extends JPanel {
     Panel.addTask();
   }
 });
-  JButton readFile = new JButton("Read File");
+  JButton readFile = new JButton("Edit File");
   southBtnPanel.add(readFile);
   readFile.addMouseListener(new MouseAdapter(){
     public void mousePressed(MouseEvent e) {
@@ -103,14 +114,30 @@ public class Panel extends JPanel {
   calendar.addMouseListener(new MouseAdapter(){
     public void mousePressed(MouseEvent e) {
       LocalDate today = LocalDate.now();
+      System.out.println("helll");
+      Task at = new Task();
       DatePickerSettings dateSettings = new DatePickerSettings();
+      dateSettings.setHighlightPolicy(at);
+      // DatePickerSettings.DateArea dateutur  = DatePickerSettings.DateArea.CalendarDefaultBackgroundHighlightedDates;
+      // dateSettings.setColor(dateutur,Color.BLACK);
       DatePicker adate = new DatePicker(dateSettings);
-      dateSettings.setHighlightPolicy(new Highlight());
+
+      adate.setDateToToday();
+      System.out.println(adate);
+      // dateSettings.setHighlightPolicy(new Highlight());
       JFrame calendar = new JFrame();
-      // Highlight highlight = new Highlight();
       CalendarPanel date1 = new CalendarPanel(adate);
+      Task t = new Task();
       
-      // highlight.getHighlightInformationOrNull(today);
+     
+      System.out.println(today);
+      // Date input2 = new Date("31/08/2016");
+      // LocalDate date2 = input2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+      // Date input = new Date("30/08/2016");
+      // LocalDate date = input.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+      // date1.setSelectedDate(today);
+      // date1.setSelectedDate(date);
+      // date1.setSelectedDate(date2);
       calendar.setContentPane(date1);
       calendar.setVisible(true);
       Toolkit tk = Toolkit.getDefaultToolkit();
@@ -120,6 +147,27 @@ public class Panel extends JPanel {
       calendar.setSize(screenWidth / 2, screenHeight / 2);
       calendar.setLocation(screenWidth / 4, screenHeight / 4);
       calendar.pack();
+    }
+  });
+  JButton openFile = new JButton("Open File");
+  southBtnPanel.add(openFile);
+  openFile.addMouseListener(new MouseAdapter(){
+    public void mousePressed(MouseEvent e) {
+      JFileChooser fileChooser = new JFileChooser();
+      fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+      Component y = new Checkbox();
+      int result = fileChooser.showOpenDialog(y);
+      if (result == JFileChooser.APPROVE_OPTION) {
+          File selectedFile = fileChooser.getSelectedFile();
+          System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+          File f = fileChooser.getSelectedFile();
+          try{
+          Desktop.getDesktop().open(f);
+        }
+        catch(Exception exect){
+          System.out.println(exect);
+        }
+      }
     }
   });
   JButton createJavadoc = new JButton("Create Javadoc");
@@ -159,7 +207,8 @@ private static void addTask(){
   }else{
    importance = "not important";
  }
- Task task1 = new Task(task.getText(),description.getText(),date.getText(),importance, completed);
+ String category = String.valueOf(menu.getSelectedItem());
+ Task task1 = new Task(task.getText(),description.getText(),date.getText(),category,importance, completed);
  Task.writeToFile(task1);
  JOptionPane.showMessageDialog(frame.getComponent(0), "Task Added");
 }

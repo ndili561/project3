@@ -36,7 +36,7 @@ public class ListItem extends JPanel {
     JButton removeButton = new JButton("Remove Element");
     editTask = Panel.tasks;
     for (Task task : editTask){
-      model.addElement(task.getTask()+", "+task.getDescription()+", "+task.getDate()+", "+task.getImportance()+", "+task.isCompleted());
+      model.addElement(task.getTask()+", "+task.getDescription()+", "+task.getDate()+", "+task.getCategory()+", "+task.getImportance()+", "+task.isCompleted());
       
     }
 
