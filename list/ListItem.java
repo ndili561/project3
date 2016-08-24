@@ -1,20 +1,13 @@
 package list;
 import java.awt.*;
-// import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-// import javax.swing.DefaultListModel;
-// import javax.swing.JButton;
-// import javax.swing.JFrame;
-// import javax.swing.JList;
-// import javax.swing.JPanel;
-// import javax.swing.JScrollPane;
 import java.util.List;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-// import javax.swing.JRadioButton;
+
 
 public class ListItem extends JPanel {
 
@@ -34,6 +27,10 @@ public class ListItem extends JPanel {
     pane.setPreferredSize(new Dimension(300, 300));
     JButton editButton = new JButton("Mark as Completed");
     JButton removeButton = new JButton("Remove Element");
+    list.setFont(new Font("Arial",Font.ITALIC,18));
+    DefaultListCellRenderer renderer =  (DefaultListCellRenderer)list.getCellRenderer();  
+    renderer.setHorizontalAlignment(JLabel.CENTER); 
+    list.setForeground(Color.RED);
     editTask = Panel.tasks;
     for (Task task : editTask){
       model.addElement(task.getTask()+", "+task.getDescription()+", "+task.getDate()+", "+task.getCategory()+", "+task.getImportance()+", "+task.isCompleted());
@@ -58,8 +55,6 @@ public class ListItem extends JPanel {
     removeButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        // List<String>result = new ArrayList<String>();
-        // model = (DefaultListModel) list.getModel();
         int selectedIndex = list.getSelectedIndex();
         if (selectedIndex != -1){
           model.remove(selectedIndex); 

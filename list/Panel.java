@@ -8,20 +8,15 @@ import java.util.List;
 import java.util.*;
 import java.io.*;
 import com.github.lgooddatepicker.optionalusertools.*;
-import java.time.LocalDate;
 import com.github.lgooddatepicker.zinternaltools.*;
 import java.awt.Color;
-import java.time.ZoneId;
-import java.time.Instant;
-import javax.swing.JComboBox;
+
 
 
 
 
 
 public class Panel extends JPanel {
- private static final String TITLE_TEXT = "Task List";
- private static final int TITLE_POINTS = 24;
  private static DatePicker date;
  private static JTextField task;
  private static JTextField description;
@@ -36,13 +31,12 @@ public class Panel extends JPanel {
 
 
  public Panel() {
-  JLabel titleLabel = new JLabel(TITLE_TEXT, SwingConstants.CENTER);
-  titleLabel.setFont(titleLabel.getFont().deriveFont(Font.BOLD,
-    TITLE_POINTS));
+  JLabel titleLabel = new JLabel("Task List", SwingConstants.CENTER);
+  titleLabel.setFont(titleLabel.getFont().deriveFont(Font.BOLD,24));
   titlePanel = new JPanel();
   titlePanel.add(titleLabel); 
 
-
+  /**North Area Panel**/
   JPanel northAreaPanel = new JPanel();
   northAreaPanel.add(new JLabel("Enter Task"));
   task = new JTextField(10);
@@ -75,7 +69,7 @@ public class Panel extends JPanel {
   northPanel.add(northAreaPanel);
 
  
-
+  /**South area Panel**/
   JPanel southBtnPanel = new JPanel(new GridLayout(2, 4, 1, 1));
   JButton add = new JButton("Add to File");
   southBtnPanel.add(add);
@@ -83,7 +77,7 @@ public class Panel extends JPanel {
    public void mousePressed(MouseEvent e) {
     Panel.addTask();
   }
-});
+  });
   JButton readFile = new JButton("Edit File");
   southBtnPanel.add(readFile);
   readFile.addMouseListener(new MouseAdapter(){
@@ -91,53 +85,24 @@ public class Panel extends JPanel {
       Panel.readFile();
     }
   });
-  JButton createFile = new JButton("Create File");
-  southBtnPanel.add(createFile);
-  createFile.addMouseListener(new MouseAdapter(){
+  JButton categoriseTask = new JButton("Categorize Task");
+  southBtnPanel.add(categoriseTask);
+  categoriseTask.addMouseListener(new MouseAdapter(){
     public void mousePressed(MouseEvent e) {
-      Task task = new Task();
-      boolean create = false;
-     String file =  task.createAFile();
-    try{
-      File file2 = new File(file+"/created.txt");
-     create = file2.createNewFile();
-  }
-  catch(Exception exet){
-    System.out.println("Error");
+      Panel.categorizeTask();   
     }
-    System.out.println(create);
-  }
-
   });
   JButton calendar = new JButton("Calendar");
   southBtnPanel.add(calendar);
   calendar.addMouseListener(new MouseAdapter(){
     public void mousePressed(MouseEvent e) {
-      LocalDate today = LocalDate.now();
-      System.out.println("helll");
-      Task at = new Task();
+      Task atask = new Task();
       DatePickerSettings dateSettings = new DatePickerSettings();
-      dateSettings.setHighlightPolicy(at);
-      // DatePickerSettings.DateArea dateutur  = DatePickerSettings.DateArea.CalendarDefaultBackgroundHighlightedDates;
-      // dateSettings.setColor(dateutur,Color.BLACK);
+      dateSettings.setVisibleClearButton(false);
+      dateSettings.setHighlightPolicy(atask);
       DatePicker adate = new DatePicker(dateSettings);
-
-      adate.setDateToToday();
-      System.out.println(adate);
-      // dateSettings.setHighlightPolicy(new Highlight());
       JFrame calendar = new JFrame();
       CalendarPanel date1 = new CalendarPanel(adate);
-      Task t = new Task();
-      
-     
-      System.out.println(today);
-      // Date input2 = new Date("31/08/2016");
-      // LocalDate date2 = input2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-      // Date input = new Date("30/08/2016");
-      // LocalDate date = input.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-      // date1.setSelectedDate(today);
-      // date1.setSelectedDate(date);
-      // date1.setSelectedDate(date2);
       calendar.setContentPane(date1);
       calendar.setVisible(true);
       Toolkit tk = Toolkit.getDefaultToolkit();
@@ -158,10 +123,10 @@ public class Panel extends JPanel {
       Component y = new Checkbox();
       int result = fileChooser.showOpenDialog(y);
       if (result == JFileChooser.APPROVE_OPTION) {
-          File selectedFile = fileChooser.getSelectedFile();
-          System.out.println("Selected file: " + selectedFile.getAbsolutePath());
-          File f = fileChooser.getSelectedFile();
-          try{
+        File selectedFile = fileChooser.getSelectedFile();
+        System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+        File f = fileChooser.getSelectedFile();
+        try{
           Desktop.getDesktop().open(f);
         }
         catch(Exception exect){
@@ -199,38 +164,40 @@ public class Panel extends JPanel {
   add(southBtnPanel, BorderLayout.SOUTH);
 }
 
-private static void addTask(){
-  String importance=null;
-  String completed = "Not Completed";
-  if(radioButton.isSelected()){
-    importance = radioButton.getText();
-  }else{
-   importance = "not important";
+/**set the variable to write the file**/
+
+  private static void addTask(){
+   String importance=null;
+   String completed = "Not Completed";
+   if(radioButton.isSelected()){
+     importance = radioButton.getText();
+   }else{
+     importance = "not important";
+   }
+   String category = String.valueOf(menu.getSelectedItem());
+   Task task1 = new Task(task.getText(),description.getText(),date.getText(),category,importance, completed);
+   Task.writeToFile(task1);
+   JOptionPane.showMessageDialog(frame.getComponent(0), "Task Added");
  }
- String category = String.valueOf(menu.getSelectedItem());
- Task task1 = new Task(task.getText(),description.getText(),date.getText(),category,importance, completed);
- Task.writeToFile(task1);
- JOptionPane.showMessageDialog(frame.getComponent(0), "Task Added");
-}
 
-private static void readFile(){
- tasks = Task.loadTask();
- JFrame frame = new JFrame("List Model Example");
- frame.setContentPane(new ListItem());
- // frame.setSize(400, 200);
- frame.setVisible(true);
- Toolkit tk = Toolkit.getDefaultToolkit();
- Dimension screenSize = tk.getScreenSize();
-int screenHeight = screenSize.height;
-int screenWidth = screenSize.width;
-  frame.setSize(screenWidth / 2, screenHeight / 2);
-  frame.setLocation(screenWidth / 4, screenHeight / 4);
- 
-}
+   /**read the file**/
 
+   private static void readFile(){
+    tasks = Task.loadTask();
+    JFrame frame = new JFrame("Tasks");
+    frame.setContentPane(new ListItem());
+    frame.setVisible(true);
+    Toolkit tk = Toolkit.getDefaultToolkit();
+    Dimension screenSize = tk.getScreenSize();
+    int screenHeight = screenSize.height;
+    int screenWidth = screenSize.width;
+    frame.setSize(screenWidth / 2, screenHeight / 2);
+    frame.setLocation(screenWidth / 4, screenHeight / 4);
+  }
 
+   /**create and show the GUI**/
 
-public static void createAndShowGui() {
+  public static void createAndShowGui() {
   mainPanel = new Panel();
   frame = new JFrame("To-Do List");
   frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -239,5 +206,20 @@ public static void createAndShowGui() {
   frame.setLocationByPlatform(true);
   frame.setVisible(true);
   frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-}
+   }
+
+   /**categorize tasks**/
+
+   public static void categorizeTask(){
+    Panel.readFile();
+    JFrame frame2 = new JFrame("Tasks");
+    frame2.setContentPane(new CategorizeTask());
+    frame2.setVisible(true);
+    Toolkit tk = Toolkit.getDefaultToolkit();
+    Dimension screenSize = tk.getScreenSize();
+    int screenHeight = screenSize.height;
+    int screenWidth = screenSize.width;
+    frame2.setSize(screenWidth / 2, screenHeight / 2);
+    frame2.setLocation(screenWidth / 4, screenHeight / 4);
+   }
 }
