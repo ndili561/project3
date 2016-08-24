@@ -74,8 +74,6 @@ public class ListItem extends JPanel {
             if (i == 0) {
               System.out.println(" Selections: ");
             }
-            System.out.println(selectionValues[i]);
-
             selectedValue = selectionValues[i].toString();   
           }
         }

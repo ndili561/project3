@@ -12,10 +12,6 @@ import com.github.lgooddatepicker.zinternaltools.*;
 import java.awt.Color;
 
 
-
-
-
-
 public class Panel extends JPanel {
  private static DatePicker date;
  private static JTextField task;
@@ -26,7 +22,6 @@ public class Panel extends JPanel {
  private JPanel titlePanel;
  private static Panel mainPanel;
  private static JComboBox menu;
-
 
 
 
@@ -124,7 +119,6 @@ public class Panel extends JPanel {
       int result = fileChooser.showOpenDialog(y);
       if (result == JFileChooser.APPROVE_OPTION) {
         File selectedFile = fileChooser.getSelectedFile();
-        System.out.println("Selected file: " + selectedFile.getAbsolutePath());
         File f = fileChooser.getSelectedFile();
         try{
           Desktop.getDesktop().open(f);
@@ -142,9 +136,10 @@ public class Panel extends JPanel {
       String url = "/Users/user/Desktop/javadoc/index.html";
       Runtime rt = Runtime.getRuntime();
       try{
-        Process pr = rt.exec("javadoc ~/Desktop/project3/list/*.java -d ~/Desktop/javadoc");
+        Process pr = Runtime.getRuntime().exec("javadoc ~/Desktop/project3/list/*.java -d ~/Desktop/javadoc");
+        pr.wait();
       }catch(Exception ex){
-        System.out.println("Exception");
+        System.out.println(ex);
       }
       try{
         File htmlFile = new File(url);
@@ -172,7 +167,7 @@ public class Panel extends JPanel {
    if(radioButton.isSelected()){
      importance = radioButton.getText();
    }else{
-     importance = "not important";
+     importance = "not Important";
    }
    String category = String.valueOf(menu.getSelectedItem());
    Task task1 = new Task(task.getText(),description.getText(),date.getText(),category,importance, completed);

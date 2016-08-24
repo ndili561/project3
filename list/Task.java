@@ -190,7 +190,6 @@ public class Task implements DateHighlightPolicy {
     while(bufferedScanner.hasNextLine()){
       currentLine = bufferedScanner.nextLine();
       lineScanner = new Scanner(currentLine);
-      System.out.println(currentLine);
       lineScanner.useDelimiter("    ");
       task = lineScanner.next();
       description = lineScanner.next();
@@ -198,7 +197,6 @@ public class Task implements DateHighlightPolicy {
       category = lineScanner.next();
       importance = lineScanner.next();
       completed = lineScanner.next();
-      System.out.println(category);
       tasks.add(new Task(task,description,date,category,importance,completed));
     }
   }
@@ -312,7 +310,6 @@ public class Task implements DateHighlightPolicy {
     }
   }
   Task result = new Task(array[0],array[1],array[2]+array[3],array[4],array[5],lastToken);
-  System.out.println(result.isCompleted());
   task.add(result);
   Task.reWrite(task);
   }
@@ -332,9 +329,9 @@ public class Task implements DateHighlightPolicy {
     return day;
   }
 
-    /**implements the interface for the calendar color**/
+    /**implements the interface for the calendar day color**/
 
-    public HighlightInformation getHighlightInformationOrNull(LocalDate date){
+  public HighlightInformation getHighlightInformationOrNull(LocalDate date){
       List <Task> task = Task.loadTask();
       int dayInInt = 0;
       int monthInInt = 0;
@@ -348,10 +345,10 @@ public class Task implements DateHighlightPolicy {
          monthInInt = calendar.get(Calendar.MONTH);
          month = Task.getMonthForInt(monthInInt);
          String mon = month.toUpperCase();
-         System.out.println(month);
-         if ((date.getDayOfMonth() == dayInInt & date.getMonth().equals(mon)) & tsk.getCategory().equals("Business")) {
+         System.out.println(date.getMonth());
+         if (date.getDayOfMonth() == dayInInt & tsk.getCategory().equals("Business")) {
            return new HighlightInformation(Color.red, null, tsk.getDescription()+", Business category");
-         }if ((date.getDayOfMonth() == dayInInt & date.getMonth().equals(mon)) & tsk.getCategory().equals("Pleasure")){
+          }if (date.getDayOfMonth() == dayInInt & tsk.getCategory().equals("Pleasure")){
           return new HighlightInformation(Color.green, null, tsk.getDescription()+", Pleasure category");
         }
       } 
