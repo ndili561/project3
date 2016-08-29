@@ -34,8 +34,6 @@ public class SplashWindow extends JFrame {
        System.out.println("Exception" +e);
         }
         img = new ImageIcon(image);
-        int width = img.getIconWidth();
-        int height = img.getIconHeight();
         imglabel = new JLabel(img,JLabel.CENTER);
         add(imglabel);
         setLayout(null);
