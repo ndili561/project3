@@ -133,14 +133,7 @@ public class Panel extends JPanel {
   southBtnPanel.add(createJavadoc);
   createJavadoc.addMouseListener(new MouseAdapter(){
     public void mousePressed(MouseEvent e) {
-      String url = "/Users/user/Desktop/javadoc/index.html";
-      Runtime rt = Runtime.getRuntime();
-      try{
-        Process pr = Runtime.getRuntime().exec("javadoc ~/Desktop/project3/list/*.java -d ~/Desktop/javadoc");
-        pr.wait();
-      }catch(Exception ex){
-        System.out.println(ex);
-      }
+      String url = "javadoc/index.html";
       try{
         File htmlFile = new File(url);
         Desktop.getDesktop().browse(htmlFile.toURI());
