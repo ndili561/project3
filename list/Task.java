@@ -136,7 +136,7 @@ public class Task implements DateHighlightPolicy {
 
   public static void writeToFile(Task task){
   // String path = Task.choose();
-  File file = new File("/Users/user/Desktop/text.txt");
+  File file = new File("text.txt");
   FileWriter writer = null;
   try
   {
@@ -159,7 +159,7 @@ public class Task implements DateHighlightPolicy {
   }
     }
 
-/**choose the file**/
+  /**choose the file**/
   protected static String choose(){
  String file = null;
  JFileChooser chooser = new JFileChooser();
@@ -171,10 +171,10 @@ public class Task implements DateHighlightPolicy {
   return file;
   }
 
-/** read the file**/
+  /** read the file**/
   public static List<Task> loadTask(){
- // String path = Task.choose();
-   File file = new File("/Users/user/Desktop/text.txt");
+ 
+   File file = new File("text.txt");
    Scanner bufferedScanner = null;
    tasks = new ArrayList<Task>();
    try{
@@ -244,21 +244,21 @@ public class Task implements DateHighlightPolicy {
      }
    }
    Task.reWrite(task);
- }
+  }
 
 
 
- /**rewrite the file after amendements**/
- public static void reWrite(List<Task> list){
+  /**rewrite the file after amendements**/
+  public static void reWrite(List<Task> list){
    PrintWriter writer = null;
    try{
-    writer = new PrintWriter("/Users/user/Desktop/text.txt");
+    writer = new PrintWriter("text.txt");
     writer.print("");
   }catch(Exception exec){
    System.out.println("Exception"+exec);
   }
   writer.close();
-  File file = new File("/Users/user/Desktop/text.txt");
+  File file = new File("text.txt");
   FileWriter write = null;
   try{
   write = new FileWriter(file,true);
@@ -313,6 +313,7 @@ public class Task implements DateHighlightPolicy {
   task.add(result);
   Task.reWrite(task);
   }
+
   /**return a list of the events per day**/
   public static List<Integer> eventsDay(){
     Date d = null;
@@ -329,14 +330,15 @@ public class Task implements DateHighlightPolicy {
     return day;
   }
 
-    /**implements the interface for the calendar day color**/
+  /**implements the interface for the calendar day color**/
 
   public HighlightInformation getHighlightInformationOrNull(LocalDate date){
       List <Task> task = Task.loadTask();
       int dayInInt = 0;
       int monthInInt = 0;
       String month = null;
-      for (Task tsk : task){
+    for( Iterator< Task > it = task.iterator(); it.hasNext() ; ){
+      Task tsk = it.next();
         if (tsk.isCompleted().equals("Not Completed")){
          Date day = Task.dateToDate(tsk.getDate());
          Calendar calendar = Calendar.getInstance();
@@ -351,7 +353,7 @@ public class Task implements DateHighlightPolicy {
           }if (date.getDayOfMonth() == dayInInt & tsk.getCategory().equals("Pleasure")){
           return new HighlightInformation(Color.green, null, tsk.getDescription()+", Pleasure category");
         }
-      } 
+      }
     }
     return null;
   }  

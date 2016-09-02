@@ -28,7 +28,7 @@ public class ListItem extends JPanel {
     JButton editButton = new JButton("Mark as Completed");
     JButton removeButton = new JButton("Remove Element");
     list.setFont(new Font("Arial",Font.ITALIC,18));
-    DefaultListCellRenderer renderer =  (DefaultListCellRenderer)list.getCellRenderer();  
+    DefaultListCellRenderer renderer =  (DefaultListCellRenderer)list.getCellRenderer(); 
     renderer.setHorizontalAlignment(JLabel.CENTER); 
     list.setForeground(Color.RED);
     editTask = Panel.tasks;
@@ -50,7 +50,6 @@ public class ListItem extends JPanel {
         }
       JOptionPane.showMessageDialog(list.getComponent(0), "Task Set As Completed");
       }
-
     });
     removeButton.addActionListener(new ActionListener() {
       @Override

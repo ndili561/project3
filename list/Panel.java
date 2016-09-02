@@ -47,7 +47,7 @@ public class Panel extends JPanel {
   JButton datePickerButton = date.getComponentToggleCalendarButton();
   datePickerButton.setText("Task Date");
   datePickerButton.setIcon(dateExampleIcon);
-  datePickerButton.setIcon(dateExampleIcon);
+
   northAreaPanel.add(date);
   String[] category={"Business","Pleasure"};
   menu = new JComboBox<String>(category);

@@ -88,21 +88,4 @@ public class TaskTest{
   assertEquals("12/12/2016", task.getDate());
   }
 
-  // @Test
-  // public void cateriseTasks(){
-  // List<Task>test = new ArrayList<>();
-  // test.add(task);
-  // test.add(task2);
-  // test = Task.categoriseBusiness();
-  // assertEquals(2,test.size());
-  // }
-
-  // @Test
-  // public void cateriseTasksPleasure(){
-  // List<Task>test = new ArrayList<>();
-  // test.add(task);
-  // test.add(task2);
-  // test = Task.categorisePleasure();
-  // assertEquals(0, test.size());
-  // }
 }

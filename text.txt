@@ -1,4 +1,3 @@
-gsgs    gsgs    September 15, 2016    Business    not Important    Not Completed
-restaurant    with friends    September 20, 2016    Pleasure    Important    Not Completed
-restaurant    with friends    September 22, 2016    Business    Important    Not Completed
-restuarnt      with collegue     September 23 2016     Pleasure     Important    Completed
+qfqafa    faa    September 24, 2016    Business    Important    Not Completed
+qfqafa    faa    September 24, 2016    Pleasure    Important    Not Completed
+qfqafa    faa    September 28, 2016    Pleasure    Important    Not Completed

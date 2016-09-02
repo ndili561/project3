@@ -1,8 +1,6 @@
 package list;
 import javax.swing.*;
 import java.awt.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.awt.Image;
 import javax.imageio.ImageIO;
 import java.io.*;
@@ -18,7 +16,7 @@ public class SplashWindow extends JFrame {
     private ImageIcon img;
     private Image image;
     private static JProgressBar pbar;
-    Thread t = null;
+    private Thread t = null;
  
     public SplashWindow() {
         setSize(404, 310);
@@ -47,15 +45,16 @@ public class SplashWindow extends JFrame {
         pbar.setPreferredSize(new Dimension(310, 30));
         pbar.setBounds(0, 290, 404, 20);
  
-        Thread t = new Thread() {
+        t = new Thread() {
             public void run() {
                 int i = 0;
                 while (i <= 100) {
                     pbar.setValue(i);
                     try {
                         sleep(30);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(SplashWindow.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (Exception ex) {
+                       
+                        System.out.println("Exception" + ex);
                     }
                     i++;
                 }

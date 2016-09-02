@@ -26,7 +26,7 @@ public class CategorizeTask extends ListItem{
     JButton businessButton = new JButton("Business Tasks");
     JButton pleasureButton = new JButton("Pleasure Tasks");
     list.setFont(new Font("Arial",Font.ITALIC,18));
-    DefaultListCellRenderer renderer =  (DefaultListCellRenderer)list.getCellRenderer();  
+    DefaultListCellRenderer renderer =  (DefaultListCellRenderer)list.getCellRenderer();  /**render items in the list**/
     renderer.setHorizontalAlignment(JLabel.CENTER); 
     list.setForeground(Color.RED);
     edit = Panel.tasks;
@@ -50,11 +50,13 @@ public class CategorizeTask extends ListItem{
       @Override
       public void actionPerformed(ActionEvent e) {
         List<Task> pleasure = Task.categorisePleasure();
+        System.out.println("pleasure");
         model.clear();
         for (Task task : pleasure){
-          model.addElement(task.getTask()+", "+task.getDescription()+", "+task.getDate()+", "+task.getCategory()+", "+task.getImportance()+", "+task.isCompleted());  
+          model.addElement(task.getTask()+", "+task.getDescription()+", "+task.getDate()+", "+task.getCategory()+", "+task.getImportance()+", "+task.isCompleted());
+          System.out.println(task.getCategory());  
         }
-
+       
       }
     }); 
 

@@ -1,6 +1,5 @@
 package list;
 import javax.swing.SwingUtilities;
-
 import java.util.*;
 import javax.swing.*;
 
@@ -10,9 +9,9 @@ public class Runner{
 public static void main(String[] args) {
    SplashWindow s = new SplashWindow();
    s.setVisible(true);
-           Thread t=Thread.currentThread();
+           Thread th1=Thread.currentThread();
            try{
-           t.sleep(7000);
+           th1.sleep(7000);
            s.dispose();
          }
          catch(Exception e){
